@@ -10,8 +10,8 @@ Understanding battery charging dynamics is critical for applications like electr
 This engineering project uses MATLAB to model a lithium-ion battery charging profile as a simple, first-order RC-circuit analog (capacitor charging). By utilizing real time-series battery cycling data, the system evaluates model fit, computes energy transfer via numerical integration, and quantifies performance efficiency losses.
 
 ## Core Tasks
-1. **Mathematical Curve Fitting:** Uses the MATLAB Curve Fitting Toolbox to fit the exponential equation \(V(t) = V_{max}(1 - e^{-t/RC})\) to estimate the unknown RC time constant (\(\tau\)) against a fully charged target of 3.6V.
-2. **Electrical Visualization:** Generates a unified figure with three synchronized subplots tracking Voltage vs. Time, Current vs. Time, and Power vs. Time (\(P = I \times V\)).
+1. **Mathematical Curve Fitting:** Uses the MATLAB Curve Fitting Toolbox to fit the exponential equation $$V(t) = V_{\max}\left(1 - e^{-t / RC}\right)$$ to estimate the unknown RC time constant ($$\tau = R \times C$$) against a fully charged target of 3.6V.
+2. **Electrical Visualization:** Generates a unified figure with three synchronized subplots tracking Voltage vs. Time, Current vs. Time, and Power vs. Time $$\(P = I \times V\)$$.
 3. **Numerical Differentiation:** Performs a rate-of-change analysis via the `gradient` function to calculate derivatives across intervals and compute exact times to reach 80% and 100% state of charge.
 4. **Numerical Integration:** Employs the trapezoidal rule (`trapz`) to calculate the total energy delivered (area under the power-time curve).
 5. **Efficiency Loss Estimation:** Estimates total resistive energy dissipation via Joule's heating formula (\(P_{loss} = I^2 \times R\)).
