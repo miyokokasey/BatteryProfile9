@@ -1,43 +1,48 @@
 # **Modeling and Analyzing a Lithium-Ion Battery Charging Profile**
 #### Description:
 
-This MATLAB project models and analyzes the charging behavior of a lithium-ion battery cell using real cycling data from MathWorks' single-cell battery aging dataset. It fits the data to circuit-based models, then uses numerical differentiation and integration to quantify charge time, energy delivered, resistive energy loss, and the rate of voltage change — including separating and characterizing the constant-current (CC) and constant-voltage (CV) charging regions — for Cycle 1 of the recorded data.
+This MATLAB project models and analyzes the charging behavior of a lithium-ion battery cell using real cycling data from MathWorks' single-cell battery aging dataset. It follows the suggested tasks from the [`BatteryCharging_StudentProjectTemplate`](BatteryCharging_StudentProjectTemplate_Preview%20(2).pdf): fitting the RC voltage equation, visualizing voltage/current/power, and computing analytical results (rate of voltage change, charge time, total energy delivered, and resistive energy loss) — for Cycle 1 of the recorded data. It then goes beyond the template with additional analysis separating and characterizing the constant-current (CC) and constant-voltage (CV) charging regions.
 
 ---
 ### Methods
 
-The battery's charging voltage is first approximated with the classic single-exponential RC charging equation:
+The battery's charging voltage is first approximated with the classic single-exponential RC charging equation from the project template:
 
 `V(t) = Vmax * (1 - exp(-t / RC))`
 
-Real measurements (current, voltage, time) are loaded from `singleCellLifeTimeData.mat`, parsed and segmented into charge/discharge phases with the Predictive Maintenance Toolbox's `batteryTestDataParser`, then used to:
+Real measurements (current, voltage, time) are loaded from `singleCellLifeTimeData.mat`, parsed and segmented into charge/discharge phases with the Predictive Maintenance Toolbox's `batteryTestDataParser`, then used to, in the order suggested by the project template:
 
-- **Fit the RC model**: Use the Curve Fitting Toolbox (`fit`) to estimate the time constant `tau = R * C` against a fixed Vmax of 3.6 V across the entire charge.
-- **Compute charge time**: Find the elapsed time to reach 80% and 100% of Vmax.
-- **Analyze rate of voltage change**: Use `gradient` to compute dV/dt at the 50%, 80%, and 100% charge points and flag direction-change transitions (e.g., between current steps and the CC → CV taper).
-- **Compute total energy delivered**: Integrate power (`P = I * V`) over time with `trapz` to get energy in joules and watt-hours.
-- **Estimate resistive energy loss**: Integrate `P_loss = I^2 * R` (using the dataset's internal resistance measurements) over time to quantify heat losses.
-- **Visualize voltage, current, and power**: Plot all three vs. time as synchronized subplots for one charging cycle.
-- **Separate CC and CV regions**: Detect the CC→CV transition as the point where voltage first reaches 99.5% of its peak, confirmed against where dV/dt flattens near 0.
-- **Fit CC and CV regions independently**: Fit the CC-region voltage to an exponential rise and the CV-region current to an exponential decay `I(t) = I0 * exp(-t/tau_cv)`, each with its own time constant.
-- **Compare energy by phase**: Integrate power separately over the CC and CV regions to see how charging energy is distributed between the two phases.
+1. **Fit the RC model** (Task 1): Use the Curve Fitting Toolbox (`fit`) to estimate the time constant `tau = R * C` against a fixed Vmax of 3.6 V across the entire charge.
+2. **Visualize voltage, current, and power** (Task 2): Plot all three vs. time as synchronized subplots for one charging cycle.
+3. **Compute analytical results** (Task 3):
+   - **Analyze rate of voltage change**: Use `gradient` to compute dV/dt at the 50%, 80%, and 100% charge points and flag direction-change transitions.
+   - **Compute charge time**: Find the elapsed time to reach 80% and 100% of Vmax.
+   - **Compute total energy delivered**: Integrate power (`P = I * V`) over time with `trapz` to get energy in joules and watt-hours.
+   - **Estimate resistive energy loss**: Integrate `P_loss = I^2 * R` (using the dataset's internal resistance measurements) over time to quantify heat losses.
+   - Save the above results to a summary table.
+
+Beyond the suggested tasks, this project also:
+
+- **Separates CC and CV regions**: Detects the CC→CV transition as the point where voltage first reaches 99.5% of its peak, confirmed against where dV/dt flattens near 0.
+- **Fits CC and CV regions independently**: Fits the CC-region voltage to an exponential rise and the CV-region current to an exponential decay `I(t) = I0 * exp(-t/tau_cv)`, each with its own time constant.
+- **Compares energy by phase**: Integrates power separately over the CC and CV regions to see how charging energy is distributed between the two phases.
 
 ---
 
 ### Folder Structure
 
 #### `/data_analysis_code/`
-MATLAB Live Scripts performing the core analysis, each loading and segmenting the cycle-1 charging data before running its analysis:
+MATLAB Live Scripts performing the core analysis, each loading and segmenting the cycle-1 charging data before running its analysis. Listed in project-template task order, with the extra scripts (beyond the suggested tasks) at the end:
 
-- [`fitting_RCeq.mlx`](data_analysis_code/fitting_RCeq.mlx): Fits a single-exponential RC charging equation to the entire measured voltage curve and reports the fitted time constant and goodness-of-fit statistics (R², RMSE, SSE).
-- [`charge_time.mlx`](data_analysis_code/charge_time.mlx): Calculates the time required to reach 80% and 100% state of charge.
-- [`rate_change_analysis.mlx`](data_analysis_code/rate_change_analysis.mlx): Computes dV/dt across the charging window and summarizes the rate of voltage change at the 50%, 80%, and 100% charge points, flagging direction-change transitions.
-- [`total_energy_delivered.mlx`](data_analysis_code/total_energy_delivered.mlx): Integrates power over time to compute total energy delivered to the battery (J and Wh).
-- [`resistive_energy_loss.mlx`](data_analysis_code/resistive_energy_loss.mlx): Integrates I²R power loss over time to estimate total resistive energy loss (J and Wh).
-- [`vIp_vs_t_eq.mlx`](data_analysis_code/vIp_vs_t_eq.mlx): Plots voltage, current, and power vs. time as three subplots for one charging cycle.
-- [`CC_CV_region.mlx`](data_analysis_code/CC_CV_region.mlx): Detects the CC→CV transition point and plots a dual-axis voltage/current profile with the CC and CV regions shaded.
-- [`fitting_CC_CV.mlx`](data_analysis_code/fitting_CC_CV.mlx): Independently fits the CC region (voltage, exponential rise) and CV region (current, exponential decay), reporting each fit's time constant and goodness-of-fit.
-- [`energy_distribution_byPhase.mlx`](data_analysis_code/energy_distribution_byPhase.mlx): Integrates power separately across the CC and CV regions to report energy delivered and its percentage split between phases.
+- [`fitting_RCeq.mlx`](data_analysis_code/fitting_RCeq.mlx) — **Task 1**: Fits a single-exponential RC charging equation to the entire measured voltage curve and reports the fitted time constant and goodness-of-fit statistics (R², RMSE, SSE).
+- [`vIp_vs_t_eq.mlx`](data_analysis_code/vIp_vs_t_eq.mlx) — **Task 2**: Plots voltage, current, and power vs. time as three subplots for one charging cycle.
+- [`rate_change_analysis.mlx`](data_analysis_code/rate_change_analysis.mlx) — **Task 3**: Computes dV/dt across the charging window and summarizes the rate of voltage change at the 50%, 80%, and 100% charge points, flagging direction-change transitions.
+- [`charge_time.mlx`](data_analysis_code/charge_time.mlx) — **Task 3**: Calculates the time required to reach 80% and 100% state of charge.
+- [`total_energy_delivered.mlx`](data_analysis_code/total_energy_delivered.mlx) — **Task 3**: Integrates power over time to compute total energy delivered to the battery (J and Wh).
+- [`resistive_energy_loss.mlx`](data_analysis_code/resistive_energy_loss.mlx) — **Task 3**: Integrates I²R power loss over time to estimate total resistive energy loss (J and Wh).
+- [`CC_CV_region.mlx`](data_analysis_code/CC_CV_region.mlx) — *Additional*: Detects the CC→CV transition point and plots a dual-axis voltage/current profile with the CC and CV regions shaded.
+- [`fitting_CC_CV.mlx`](data_analysis_code/fitting_CC_CV.mlx) — *Additional*: Independently fits the CC region (voltage, exponential rise) and CV region (current, exponential decay), reporting each fit's time constant and goodness-of-fit.
+- [`energy_distribution_byPhase.mlx`](data_analysis_code/energy_distribution_byPhase.mlx) — *Additional*: Integrates power separately across the CC and CV regions to report energy delivered and its percentage split between phases.
 
 #### `/Media/`
 PNG figures exported from the Live Scripts above, used for the analysis report below.
@@ -55,6 +60,7 @@ Contains the raw dataset and the scripts used to download, load, and parse it:
 - [`singleCellLifeTimeData.mat`](singleCellLifeTimeData.mat): Copy of the dataset used by the analysis scripts.
 - [`license.txt`](license.txt): CC BY 4.0 license text for the dataset.
 - [`LICENSE`](LICENSE): MIT license covering this project's code.
+- [`BatteryCharging_StudentProjectTemplate_Preview (2).pdf`](BatteryCharging_StudentProjectTemplate_Preview%20(2).pdf): The original project template/assignment brief, defining Tasks 1–3 that this project's analysis is organized around.
 
 ---
 
@@ -71,42 +77,9 @@ To inspect the raw dataset directly, open [`data_extraction.mlx`](battery_datase
 
 ## Charging Profile Analysis Report (Cycle 1)
 
-All results below are computed from Cycle 1 of the single lithium-ion cell in `singleCellLifeTimeData.mat`, which uses a multi-step fast-charging policy rather than a simple, single-rate constant current: the raw current trace steps down from **~6.6 A → ~4.0 A → ~1.1 A** before tapering off in a constant-voltage (CV) hold. This stair-step behavior is visible directly in the raw measurements below and explains several of the fitting results that follow.
+All results below are computed from Cycle 1 of the single lithium-ion cell in `singleCellLifeTimeData.mat`, which uses a multi-step fast-charging policy rather than a simple, single-rate constant current: the raw current trace steps down from **~6.6 A → ~4.0 A → ~1.1 A** before tapering off in a constant-voltage (CV) hold. This stair-step behavior is visible directly in the raw measurements below and explains several of the fitting results that follow. Sections are ordered to match Tasks 1–3 of the project template, with additional analysis beyond the suggested tasks placed at the end.
 
-### Raw Voltage, Current, and Power Profile
-[`vIp_vs_t_eq.mlx`](data_analysis_code/vIp_vs_t_eq.mlx) plots the three key electrical quantities together for the full charging cycle.
-
-![Voltage, Current, and Power vs. Time](Media/vIp_vs_t.png)
-
-Each current step-down causes a visible voltage sag followed by a re-rise (seen as the saw-tooth pattern between ~250s and ~650s), since voltage momentarily drops when internal-resistance ohmic drop decreases at each lower current step. Power (P = I·V) tracks the current staircase closely, peaking near **23.4 W** early in the charge and decaying toward 0 W as current tapers during the CV hold.
-
-### Time to 80% and 100% Charge
-[`charge_time.mlx`](data_analysis_code/charge_time.mlx) locates the first timestamps at which voltage crosses the 80%- and 100%-of-range thresholds (using Vmax = 3.6 V, Vmin = 2.0 V).
-
-![RC Battery Charging Curve with Charge-Time Markers](Media/charge_time.png)
-
-| Charge Level | Time |
-| --- | --- |
-| 80% charge | **24.35 s** (0.41 min) |
-| 100% charge | **1246.49 s** (20.77 min) |
-
-The 80% mark is reached almost immediately (under 25 seconds) because the cell starts deeply discharged near 2.0 V and the initial current step drives a steep voltage rise; the remaining climb from 80% to 100% — the CV taper — takes over 20 minutes on its own, more than 98% of the total charge time.
-
-### Rate of Voltage Change (dV/dt)
-[`rate_change_analysis.mlx`](data_analysis_code/rate_change_analysis.mlx) computes the numerical derivative of voltage with respect to time and reports it at the 50%, 80%, and 100% charge points, along with points where the slope changes direction (the current-step transitions).
-
-![Voltage vs. Time with dV/dt Annotations](Media/dv_dt_curve.png)
-![Rate of Voltage Change Summary Table](Media/dv_dt_table.png)
-
-| Charge Level | Time (s) | Voltage (V) | dV/dt (V/s) |
-| --- | --- | --- | --- |
-| 50% | 0 | 2.0326 | 0.70662 |
-| 80% | 2.68 | 2.8826 | 0.048187 |
-| 100% | 1246.5 | 3.6004 | 0.0014743 |
-
-dV/dt drops by nearly **3 orders of magnitude** from the start of charge to full charge (0.707 V/s → 0.0015 V/s), confirming the charging profile spends its early seconds in a fast, steep-voltage-rise regime, then flattens out almost completely during the long CV taper.
-
-### RC-Circuit (Single-Exponential) Fit
+### Task 1: Fit the Voltage Equation (RC-Circuit Fit)
 [`fitting_RCeq.mlx`](data_analysis_code/fitting_RCeq.mlx) first illustrates the idealized RC charging equation with example parameters (Vmax = 3.6 V, R = 10 Ω, C = 10 F) before fitting it against the real measured data.
 
 ![Idealized RC Charging Curve (illustrative example)](Media/RC_eq_model.png)
@@ -124,6 +97,81 @@ It then attempts to fit the *entire* real charging curve to a single classic RC 
 | SSE | 17.3651 |
 
 A negative R² means this single-exponential model fits the real data **worse than a flat horizontal line would** — it is not an appropriate model for the whole cycle. This is expected: the measured curve isn't one smooth exponential rise, it's a multi-step staircase (visible in the plot as repeated sawtooth dips), so a single time constant cannot capture the current step-downs partway through the charge.
+
+### Task 2: Plot the Electrical Terms (Voltage, Current, Power vs. Time)
+[`vIp_vs_t_eq.mlx`](data_analysis_code/vIp_vs_t_eq.mlx) plots the three key electrical quantities together for the full charging cycle.
+
+![Voltage, Current, and Power vs. Time](Media/vIp_vs_t.png)
+
+Each current step-down causes a visible voltage sag followed by a re-rise (seen as the saw-tooth pattern between ~250s and ~650s), since voltage momentarily drops when internal-resistance ohmic drop decreases at each lower current step. Power (P = I·V) tracks the current staircase closely, peaking near **23.4 W** early in the charge and decaying toward 0 W as current tapers during the CV hold.
+
+### Task 3: Compute Analytical Results
+
+#### Rate of Voltage Change (dV/dt)
+[`rate_change_analysis.mlx`](data_analysis_code/rate_change_analysis.mlx) computes the numerical derivative of voltage with respect to time and reports it at the 50%, 80%, and 100% charge points, along with points where the slope changes direction (the current-step transitions).
+
+![Voltage vs. Time with dV/dt Annotations](Media/dv_dt_curve.png)
+![Rate of Voltage Change Summary Table](Media/dv_dt_table.png)
+
+| Charge Level | Time (s) | Voltage (V) | dV/dt (V/s) |
+| --- | --- | --- | --- |
+| 50% | 0 | 2.0326 | 0.70662 |
+| 80% | 2.68 | 2.8826 | 0.048187 |
+| 100% | 1246.5 | 3.6004 | 0.0014743 |
+
+dV/dt drops by nearly **3 orders of magnitude** from the start of charge to full charge (0.707 V/s → 0.0015 V/s), confirming the charging profile spends its early seconds in a fast, steep-voltage-rise regime, then flattens out almost completely during the long CV taper.
+
+#### Time to 80% and 100% Charge
+[`charge_time.mlx`](data_analysis_code/charge_time.mlx) locates the first timestamps at which voltage crosses the 80%- and 100%-of-range thresholds (using Vmax = 3.6 V, Vmin = 2.0 V).
+
+![RC Battery Charging Curve with Charge-Time Markers](Media/charge_time.png)
+
+| Charge Level | Time |
+| --- | --- |
+| 80% charge | **24.35 s** (0.41 min) |
+| 100% charge | **1246.49 s** (20.77 min) |
+
+The 80% mark is reached almost immediately (under 25 seconds) because the cell starts deeply discharged near 2.0 V and the initial current step drives a steep voltage rise; the remaining climb from 80% to 100% — the CV taper — takes over 20 minutes on its own, more than 98% of the total charge time.
+
+#### Total Energy Delivered
+[`total_energy_delivered.mlx`](data_analysis_code/total_energy_delivered.mlx) integrates instantaneous power (P = I·V) over the full charge using the trapezoidal rule.
+
+![Total Energy Delivered](Media/total_energy.png)
+
+| Metric | Value |
+| --- | --- |
+| Total energy delivered | **14221.61 J** (3.9504 Wh) |
+
+#### Resistive (I²R) Energy Loss
+[`resistive_energy_loss.mlx`](data_analysis_code/resistive_energy_loss.mlx) integrates `P_loss = I² * R` over the charge, using the dataset's measured internal resistance.
+
+![Resistive Energy Loss](Media/energy_loss.png)
+
+| Metric | Value |
+| --- | --- |
+| Resistive energy loss | **335.59 J** (0.09322 Wh) |
+| Loss as % of total energy delivered | ≈ **2.36%** |
+
+Only about 2.4% of the energy delivered to the cell is dissipated as resistive heat during Cycle 1 — the charging process is highly efficient at this point in the cell's life, consistent with a fresh/early cycle rather than an aged cell with higher internal resistance.
+
+#### Task 3 Summary Table
+
+| Result | Value |
+| --- | --- |
+| RC time constant (whole-cycle fit) | 0.4866 s (R² = -4.94, poor fit) |
+| Time to 80% charge | 24.35 s |
+| Time to 100% charge | 1246.49 s |
+| dV/dt at 50% / 80% / 100% charge | 0.7066 / 0.0482 / 0.0015 V/s |
+| Total energy delivered | 14221.61 J (3.9504 Wh) |
+| Resistive (I²R) energy loss | 335.59 J (0.09322 Wh) |
+| Resistive loss as % of energy delivered | ≈2.36% |
+
+### Interpretation of Results
+Engineers compute these Task 3 results to characterize how quickly and how efficiently a cell charges: charge time and dV/dt describe charging *speed* at each stage, while total energy delivered and resistive loss describe charging *efficiency* — together they inform charger design, thermal management, and safety limits (e.g., how much heat a fast-charging step will generate). The main limitation of this analysis is that the whole-cycle RC model (Task 1) assumes one exponential time constant, which does not hold for this cell's multi-step fast-charging policy — the poor R² is itself a useful engineering finding, showing that a simple RC analog under-models real fast-charge behavior. A practical next step is to model each current step (or the CC and CV regions, explored below) with its own time constant rather than fitting the full cycle at once, and to repeat this analysis across multiple cycles to see how charge time, energy, and resistive loss change as the cell ages toward its 80% state-of-health failure point.
+
+---
+
+## Additional Analysis (Beyond the Suggested Tasks)
 
 ### CC/CV Region Separation
 [`CC_CV_region.mlx`](data_analysis_code/CC_CV_region.mlx) programmatically locates the CC→CV boundary as the first point where voltage reaches 99.5% of its peak, cross-checked against where dV/dt flattens toward 0.
@@ -154,27 +202,6 @@ Because a single exponential fit poorly over the whole cycle, [`fitting_CC_CV.ml
 | CV (current decay) | I0 = 0.8192 A, tau_cv = 144.15 s | **0.8919** | 0.0674 A |
 
 Splitting the fit helps, but the CC-region voltage fit is still poor (R² = 0.12) because that region isn't truly constant-current — it contains the three separate current steps described above, so no single exponential curve fits it well either. The CV-region current decay, in contrast, is a genuinely clean single exponential and fits much better (R² = 0.89), confirming that only the final taper segment behaves like an ideal CV hold.
-
-### Total Energy Delivered
-[`total_energy_delivered.mlx`](data_analysis_code/total_energy_delivered.mlx) integrates instantaneous power (P = I·V) over the full charge using the trapezoidal rule.
-
-![Total Energy Delivered](Media/total_energy.png)
-
-| Metric | Value |
-| --- | --- |
-| Total energy delivered | **14221.61 J** (3.9504 Wh) |
-
-### Resistive (I²R) Energy Loss
-[`resistive_energy_loss.mlx`](data_analysis_code/resistive_energy_loss.mlx) integrates `P_loss = I² * R` over the charge, using the dataset's measured internal resistance.
-
-![Resistive Energy Loss](Media/energy_loss.png)
-
-| Metric | Value |
-| --- | --- |
-| Resistive energy loss | **335.59 J** (0.09322 Wh) |
-| Loss as % of total energy delivered | ≈ **2.36%** |
-
-Only about 2.4% of the energy delivered to the cell is dissipated as resistive heat during Cycle 1 — the charging process is highly efficient at this point in the cell's life, consistent with a fresh/early cycle rather than an aged cell with higher internal resistance.
 
 ### Energy Distribution by Phase (CC vs. CV)
 [`energy_distribution_byPhase.mlx`](data_analysis_code/energy_distribution_byPhase.mlx) integrates power separately over the CC and CV regions identified above to see how the delivered energy splits between the two phases.
