@@ -1,5 +1,4 @@
 # **Modeling and Analyzing a Lithium-Ion Battery Charging Profile**
-### Group 9 Internship Project
 #### Description:
 
 This MATLAB project models and analyzes the charging behavior of a lithium-ion battery cell using real cycling data from MathWorks' single-cell battery aging dataset. It fits the data to a first-order RC (resistor-capacitor) circuit analog, then uses numerical differentiation and integration to quantify charge time, energy delivered, resistive energy loss, and the rate of voltage change throughout a charging cycle.
