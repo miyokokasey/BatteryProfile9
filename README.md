@@ -60,7 +60,6 @@ Contains the raw dataset and the scripts used to download, load, and parse it:
 - [`singleCellLifeTimeData.mat`](singleCellLifeTimeData.mat): Copy of the dataset used by the analysis scripts.
 - [`license.txt`](license.txt): CC BY 4.0 license text for the dataset.
 - [`LICENSE`](LICENSE): MIT license covering this project's code.
-- [`BatteryCharging_StudentProjectTemplate_Preview (2).pdf`](BatteryCharging_StudentProjectTemplate_Preview%20(2).pdf): The original project template/assignment brief, defining Tasks 1–3 that this project's analysis is organized around.
 
 ---
 
