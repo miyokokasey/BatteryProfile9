@@ -59,6 +59,7 @@ Contains the raw dataset and the scripts used to download, load, and parse it:
 #### Root files
 - [`singleCellLifeTimeData.mat`](singleCellLifeTimeData.mat): Copy of the dataset used by the analysis scripts.
 - [`license.txt`](license.txt): CC BY 4.0 license text for the dataset.
+- [`MLX_FUNCTION_REFERENCE.md`](MLX_FUNCTION_REFERENCE.md): Explaining the MATLAB functions & specifiers.
 - [`LICENSE`](LICENSE): MIT license covering this project's code.
 
 ---
