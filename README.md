@@ -224,11 +224,9 @@ Even though the CV taper occupies roughly a third of the total charging time (~6
 
 ###  Contributors
 
-Based on the repository's commit history:
-
-- **miyokokasey**
-- **AngeloB06**
-- **viviingn**
+- **Kasey Miyoko**
+- **Angelo Bisquera**
+- **Vivian Nguyen**
 - **Asher Vicera**
 
 ---
