@@ -1,7 +1,7 @@
 # **Modeling and Analyzing a Lithium-Ion Battery Charging Profile**
 #### Description:
 
-This MATLAB project models and analyzes the charging behavior of a lithium-ion battery cell using real cycling data from MathWorks' single-cell battery aging dataset. It follows the suggested tasks from the [`BatteryCharging_StudentProjectTemplate`](BatteryCharging_StudentProjectTemplate_Preview%20(2).pdf): fitting the RC voltage equation, visualizing voltage/current/power, and computing analytical results (rate of voltage change, charge time, total energy delivered, and resistive energy loss) — for Cycle 1 of the recorded data. It then goes beyond the template with additional analysis separating and characterizing the constant-current (CC) and constant-voltage (CV) charging regions.
+This MATLAB project models and analyzes the charging behavior of a lithium-ion battery cell using real cycling data from MathWorks' single-cell battery aging dataset. It follows the suggested tasks from the `BatteryCharging_StudentProjectTemplate`: fitting the RC voltage equation, visualizing voltage/current/power, and computing analytical results (rate of voltage change, charge time, total energy delivered, and resistive energy loss) — for Cycle 1 of the recorded data. It then goes beyond the template with additional analysis separating and characterizing the constant-current (CC) and constant-voltage (CV) charging regions.
 
 ---
 ### Methods
